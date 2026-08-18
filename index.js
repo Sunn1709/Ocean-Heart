@@ -60,87 +60,36 @@ function saveDatabase() {
 // ========================================
 
 const COMMON_FISH = [
-    "Cá cơm",
-    "Cá trích",
-    "Cá mòi",
-    "Cá nục",
-    "Cá bạc má",
-    "Cá thu",
-    "Cá ngừ",
-    "Cá đối",
-    "Cá bống",
-    "Cá kèo",
-    "Cá dìa",
-    "Cá hồng",
-    "Cá đổng",
-    "Cá đù",
-    "Cá mối",
-    "Cá chuồn",
-    "Cá chỉ vàng",
-    "Cá liệt",
-    "Cá chim trắng",
-    "Cá sòng",
-    "Cá rô biển",
-    "Cá nóc",
-    "Cá mú nhỏ",
-    "Cá bơn",
-    "Cá thia",
-    "Cá đuôi gai",
-    "Cá mó",
-    "Cá dìa bông",
-    "Cá sặc biển",
-    "Cá bướm"
+    "Cá cơm", "Cá trích", "Cá mòi", "Cá nục", "Cá bạc má",
+    "Cá thu", "Cá ngừ", "Cá đối", "Cá bống", "Cá kèo",
+    "Cá dìa", "Cá hồng", "Cá đổng", "Cá đù", "Cá mối",
+    "Cá chuồn", "Cá chỉ vàng", "Cá liệt", "Cá chim trắng", "Cá sòng",
+    "Cá rô biển", "Cá nóc", "Cá mú nhỏ", "Cá bơn", "Cá thia",
+    "Cá đuôi gai", "Cá mó", "Cá dìa bông", "Cá sặc biển", "Cá bướm"
 ];
 
 const RARE_FISH = [
-    "Cá mú đỏ",
-    "Cá mú nghệ",
-    "Cá hồng đỏ",
-    "Cá chim trắng lớn",
-    "Cá cam",
-    "Cá thu ngàng",
-    "Cá ngừ vây vàng",
-    "Cá ngừ mắt to",
-    "Cá kiếm",
-    "Cá cờ",
-    "Cá bớp",
-    "Cá chẽm",
-    "Cá hồng vện",
-    "Cá mú cọp",
-    "Cá mú sao",
-    "Cá nâu",
-    "Cá đối mục",
-    "Cá dìa sọc",
-    "Cá mặt quỷ",
-    "Cá mao tiên"
+    "Cá mú đỏ", "Cá mú nghệ", "Cá hồng đỏ", "Cá chim trắng lớn", "Cá cam",
+    "Cá thu ngàng", "Cá ngừ vây vàng", "Cá ngừ mắt to", "Cá kiếm", "Cá cờ",
+    "Cá bớp", "Cá chẽm", "Cá hồng vện", "Cá mú cọp", "Cá mú sao",
+    "Cá nâu", "Cá đối mục", "Cá dìa sọc", "Cá mặt quỷ", "Cá mao tiên"
 ];
 
 const SUPER_RARE_FISH = [
-    "Cá ngừ vây xanh",
-    "Cá mập voi",
-    "Cá mặt trăng",
-    "Cá mái chèo",
-    "Cá rồng biển",
-    "Cá oarfish khổng lồ",
-    "Cá nhám voi",
-    "Cá kiếm đen",
-    "Cá cờ xanh",
-    "Cá quỷ biển sâu"
+    "Cá ngừ vây xanh", "Cá mập voi", "Cá mặt trăng", "Cá mái chèo", "Cá rồng biển",
+    "Cá oarfish khổng lồ", "Cá nhám voi", "Cá kiếm đen", "Cá cờ xanh", "Cá quỷ biển sâu"
 ];
 
 const SPECIAL_FISH = [
-    "Cá Vua Đại Dương",
-    "Cá Hoàng Kim",
-    "Cá Long Thần",
-    "Cá Nguyệt Hải",
-    "Cá Ocean Emperor"
+    "Cá Vua Đại Dương", "Cá Hoàng Kim", "Cá Long Thần", "Cá Nguyệt Hải", "Cá Ocean Emperor"
 ];
 
 // ========================================
-// NGƯỜI ĐANG CÂU
+// NGƯỜI ĐANG CÂU (chống spam)
 // ========================================
 
 const catching = new Set();
+const CATCH_COOLDOWN_MS = 3000; // 3 giây "đang câu"
 
 // ========================================
 // RANDOM CÁ
@@ -152,11 +101,8 @@ function getFish() {
 
     // 60%
     if (chance < 60) {
-
         return {
-            fish: COMMON_FISH[
-                Math.floor(Math.random() * COMMON_FISH.length)
-            ],
+            fish: COMMON_FISH[Math.floor(Math.random() * COMMON_FISH.length)],
             rarity: "Cá thường",
             emoji: "🐟",
             color: 0x95A5A6
@@ -165,11 +111,8 @@ function getFish() {
 
     // 30%
     if (chance < 90) {
-
         return {
-            fish: RARE_FISH[
-                Math.floor(Math.random() * RARE_FISH.length)
-            ],
+            fish: RARE_FISH[Math.floor(Math.random() * RARE_FISH.length)],
             rarity: "Cá hiếm",
             emoji: "🐠",
             color: 0x3498DB
@@ -178,11 +121,8 @@ function getFish() {
 
     // 9.5%
     if (chance < 99.5) {
-
         return {
-            fish: SUPER_RARE_FISH[
-                Math.floor(Math.random() * SUPER_RARE_FISH.length)
-            ],
+            fish: SUPER_RARE_FISH[Math.floor(Math.random() * SUPER_RARE_FISH.length)],
             rarity: "Cá siêu hiếm",
             emoji: "🌊",
             color: 0x9B59B6
@@ -191,13 +131,32 @@ function getFish() {
 
     // 0.5%
     return {
-        fish: SPECIAL_FISH[
-            Math.floor(Math.random() * SPECIAL_FISH.length)
-        ],
+        fish: SPECIAL_FISH[Math.floor(Math.random() * SPECIAL_FISH.length)],
         rarity: "Cá đặc biệt",
         emoji: "👑",
         color: 0xFFD700
     };
+}
+
+// ========================================
+// HELPER: lấy dữ liệu cá của 1 user
+// ========================================
+
+function getUserData(userId) {
+    if (!fishData[userId]) {
+        fishData[userId] = {
+            totalCaught: 0,
+            fishes: {} // { "Tên cá": số lượng }
+        };
+    }
+    return fishData[userId];
+}
+
+function addFishToUser(userId, fishName) {
+    const userData = getUserData(userId);
+    userData.totalCaught += 1;
+    userData.fishes[fishName] = (userData.fishes[fishName] || 0) + 1;
+    saveDatabase();
 }
 
 // ========================================
@@ -227,7 +186,6 @@ client.on("messageCreate", async (message) => {
         // ========================================
 
         if (!command) {
-
             return message.reply(
                 "🌊 **Ocean Catch**\n\n" +
                 "🎣 `och catch` — Câu cá\n" +
@@ -244,128 +202,70 @@ client.on("messageCreate", async (message) => {
             const userId = message.author.id;
 
             if (catching.has(userId)) {
-
                 return message.reply(
-                    "🎣 M đang câu cá rồi!\n" +
-                    "⏳ Hãy đợi đủ **30 giây**."
+                    "🎣 Bạn đang câu cá rồi, chờ chút nhé!"
                 );
             }
 
             catching.add(userId);
 
-            await message.reply(
-                "🎣 **Đã thả cần xuống biển!**\n" +
-                "🌊 Cá đang cắn câu...\n" +
-                "⏳ Thời gian câu: **30 giây**"
-            );
+            const waitingMsg = await message.reply("🎣 Đang thả cần câu...");
 
             setTimeout(async () => {
-
                 try {
-
                     const result = getFish();
 
-                    // Tạo dữ liệu người chơi
-                    if (!fishData[userId]) {
-                        fishData[userId] = {};
-                    }
-
-                    // Tạo cá nếu chưa có
-                    if (!fishData[userId][result.fish]) {
-                        fishData[userId][result.fish] = 0;
-                    }
-
-                    // +1 cá
-                    fishData[userId][result.fish]++;
-
-                    saveDatabase();
+                    addFishToUser(userId, result.fish);
 
                     const embed = new EmbedBuilder()
-                        .setTitle("🎣 CÂU CÁ THÀNH CÔNG!")
-                        .setDescription(
-                            `${result.emoji} **${message.author.displayName}** đã câu được:\n\n` +
-                            `## ${result.emoji} ${result.fish}\n\n` +
-                            `🌟 Độ hiếm: **${result.rarity}**`
-                        )
                         .setColor(result.color)
-                        .setFooter({
-                            text: "Ocean Catch • och catch"
-                        });
+                        .setTitle(`${result.emoji} Bạn câu được ${result.fish}!`)
+                        .setDescription(`Độ hiếm: **${result.rarity}**`)
+                        .setFooter({ text: `Người câu: ${message.author.username}` })
+                        .setTimestamp();
 
-                    await message.channel.send({
-                        embeds: [embed]
-                    });
+                    await waitingMsg.edit({ content: null, embeds: [embed] });
 
-                } catch (error) {
-
-                    console.error(
-                        "❌ Lỗi khi xử lý câu cá:",
-                        error
-                    );
-
+                } catch (err) {
+                    console.error("❌ Lỗi khi xử lý kết quả câu cá:", err);
+                    await waitingMsg.edit("❌ Có lỗi xảy ra khi câu cá, thử lại nhé!");
                 } finally {
-
                     catching.delete(userId);
                 }
-
-            }, 30000);
+            }, CATCH_COOLDOWN_MS);
 
             return;
         }
 
         // ========================================
-        // OCH BST
+        // OCH BST (Bộ sưu tập)
         // ========================================
 
         if (command === "bst") {
 
             const userId = message.author.id;
+            const userData = getUserData(userId);
 
-            if (
-                !fishData[userId] ||
-                Object.keys(fishData[userId]).length === 0
-            ) {
+            const fishNames = Object.keys(userData.fishes);
 
+            if (fishNames.length === 0) {
                 return message.reply(
-                    "📖 **Bộ sưu tập cá**\n\n" +
-                    "🌊 M chưa bắt được con cá nào!"
+                    "📖 Bạn chưa câu được con cá nào cả. Gõ `och catch` để bắt đầu!"
                 );
             }
 
-            const collection = fishData[userId];
-
-            let text = "";
-            let total = 0;
-            let unique = 0;
-
-            for (const fish in collection) {
-
-                total += collection[fish];
-                unique++;
-
-                text +=
-                    `• ${fish} × **${collection[fish]}**\n`;
-            }
+            const lines = fishNames
+                .sort((a, b) => userData.fishes[b] - userData.fishes[a])
+                .map(name => `• ${name}: **${userData.fishes[name]}**`);
 
             const embed = new EmbedBuilder()
-                .setTitle(
-                    `📖 Bộ sưu tập của ${message.author.displayName}`
-                )
-                .setDescription(text)
-                .addFields({
-                    name: "📊 Thống kê",
-                    value:
-                        `🐟 Tổng cá đã bắt: **${total}**\n` +
-                        `📚 Cá khác nhau: **${unique}/65**`
-                })
-                .setColor(0x3498DB)
-                .setFooter({
-                    text: "Ocean Catch • och bst"
-                });
+                .setColor(0x2ECC71)
+                .setTitle(`📖 Bộ sưu tập cá của ${message.author.username}`)
+                .setDescription(lines.join("\n"))
+                .setFooter({ text: `Tổng số cá đã câu: ${userData.totalCaught}` })
+                .setTimestamp();
 
-            return message.reply({
-                embeds: [embed]
-            });
+            return message.reply({ embeds: [embed] });
         }
 
         // ========================================
@@ -373,80 +273,47 @@ client.on("messageCreate", async (message) => {
         // ========================================
 
         return message.reply(
-            "❌ Lệnh không tồn tại.\n\n" +
-            "Dùng:\n" +
-            "🎣 `och catch`\n" +
-            "📖 `och bst`"
+            "❓ Lệnh không tồn tại. Gõ `och` để xem danh sách lệnh."
         );
 
     } catch (error) {
-
-        console.error(
-            "❌ Lỗi messageCreate:",
-            error
-        );
+        console.error("❌ Lỗi trong messageCreate:", error);
     }
 });
 
 // ========================================
-// BOT ONLINE
+// READY
 // ========================================
 
 client.once("ready", () => {
+    console.log(`✅ Bot đã đăng nhập với tên ${client.user.tag}`);
+});
 
-    console.log("================================");
-    console.log("🌊 OCEAN CATCH");
-    console.log(`✅ Bot: ${client.user.tag}`);
-    console.log(`🆔 ID: ${client.user.id}`);
-    console.log("🎣 Bot đã sẵn sàng!");
-    console.log("================================");
+// ========================================
+// ERROR HANDLING TOÀN CỤC
+// (giúp tránh crash exit 1 do lỗi không bắt được)
+// ========================================
 
+process.on("unhandledRejection", (error) => {
+    console.error("❌ Unhandled promise rejection:", error);
+});
+
+process.on("uncaughtException", (error) => {
+    console.error("❌ Uncaught exception:", error);
 });
 
 // ========================================
 // LOGIN
 // ========================================
 
-let TOKEN = process.env.DISCORD_TOKEN;
+const TOKEN = process.env.DISCORD_TOKEN;
 
 if (!TOKEN) {
-
     console.error(
-        "❌ LỖI: Không tìm thấy DISCORD_TOKEN!"
+        "❌ Không tìm thấy DISCORD_TOKEN trong biến môi trường. " +
+        "Vào Render → Environment → thêm biến DISCORD_TOKEN với token bot của bạn."
     );
-
-    console.error(
-        "👉 Vào Render → Environment → thêm DISCORD_TOKEN"
-    );
-
     process.exit(1);
 }
 
-// Xóa khoảng trắng/dấu nháy nếu lỡ nhập vào Render
-TOKEN = TOKEN.trim().replace(/^["']|["']$/g, "");
-
-client.login(TOKEN)
-    .then(() => {
-        console.log("🔐 Đang đăng nhập Discord...");
-    })
-    .catch((error) => {
-
-        console.error("❌ DISCORD LOGIN FAILED");
-
-        if (error.code === "TokenInvalid") {
-
-            console.error(
-                "❌ Token Discord không hợp lệ!"
-            );
-
-            console.error(
-                "👉 Hãy Reset Token trong Discord Developer Portal."
-            );
-
-        } else {
-
-            console.error(error);
-        }
-
-        process.exit(1);
-    });
+client.login(TOKEN);
